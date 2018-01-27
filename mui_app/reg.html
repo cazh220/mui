@@ -118,8 +118,14 @@
 						var regInfo = {
 							account: accountBox.value,
 							password: passwordBox.value,
-							email: emailBox.value
+							email: emailBox.value,
+							realname: realnamelBox.value,
+							mobile: mobileBox.value,
+							role: roleBox.value,
+							companyname: companynameBox.value,
+							companyaddress: companyaddressBox.value
 						};
+
 						var passwordConfirm = passwordConfirmBox.value;
 						if (passwordConfirm != regInfo.password) {
 							plus.nativeUI.toast('密码两次输入不一致');

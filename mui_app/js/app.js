@@ -54,11 +54,56 @@
 		if (!checkEmail(regInfo.email)) {
 			return callback('邮箱地址不合法');
 		}
+		if (!checkMobile(regInfo.mobile)) {
+			return callback('手机号不合法');
+		}
+		if (regInfo.realname == '') {
+			return callback('请填写真实姓名');
+		}
+		if (regInfo.role == '') {
+			return callback('请选择客户单位');
+		}
+		if (regInfo.companyname == '') {
+			return callback('请填写公司名称');
+		}
+		if (regInfo.companyaddress == '') {
+			return callback('请填写公司地址');
+		}
+		
 		var users = JSON.parse(localStorage.getItem('$users') || '[]');
 		users.push(regInfo);
+		console.log(JSON.stringify(users));return false;
+		//注册信息写到DB
+		mui.post('http://server-name/login.php',{
+				username:'username',
+				password:'password'
+			},function(data){
+				//服务器返回响应，根据响应结果，分析是否登录成功；
+				...
+			},'json'
+		);
+		
 		localStorage.setItem('$users', JSON.stringify(users));
 		return callback();
 	};
+	
+	/**
+	 * 检查手机号
+	 */
+	var checkMobile = function(mobile) {
+		mobile = mobile || '';
+		var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
+		if (!myreg.test(mobile))
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+
+	};
+	
 
 	/**
 	 * 获取当前状态
