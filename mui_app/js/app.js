@@ -72,18 +72,22 @@
 		
 		var users = JSON.parse(localStorage.getItem('$users') || '[]');
 		users.push(regInfo);
-		console.log(JSON.stringify(users));return false;
+		console.log(JSON.stringify(users));//return false;
 		//注册信息写到DB
-		mui.post('http://server-name/login.php',{
-				username:'username',
-				password:'password'
-			},function(data){
+		mui.post('http://www.yrsyc.cn/yuyao/api/register.php',regInfo,function(data){
 				//服务器返回响应，根据响应结果，分析是否登录成功；
-				...
+				//console.log(data.status);
+				mui.toast(data.message);
+				if(data.status == 1)
+				{
+					 localStorage.setItem('$users', JSON.stringify(users));
+				}
+				//var vData = JSON.stringify(data)
+				//alert(vData);
 			},'json'
 		);
-		
-		localStorage.setItem('$users', JSON.stringify(users));
+		//return false;
+		//localStorage.setItem('$users', JSON.stringify(users));
 		return callback();
 	};
 	
