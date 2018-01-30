@@ -19,10 +19,32 @@
 			return callback('密码最短为 6 个字符');
 		}
 		var users = JSON.parse(localStorage.getItem('$users') || '[]');
+
 		var authed = users.some(function(user) {
+			//var vData3 = JSON.stringify(user);
+			//console.log('vData3:'+vData3);
 			return loginInfo.account == user.account && loginInfo.password == user.password;
 		});
+		
+		if(!authed)
+		{
+			//ajax获取login
+			mui.post('http://www.yrsyc.cn/yuyao/api/login.php',loginInfo,function(data){
+					//服务器返回响应，根据响应结果，分析是否登录成功；
+					//mui.toast(data.message);
+					if(data.status==1)
+					{
+						users.push(loginInfo);
+						localStorage.setItem('$users', JSON.stringify(users));
+					}
+
+				},'json'
+			);
+			
+		}
+
 		if (authed) {
+			localStorage.setItem('$account', loginInfo.account);
 			return owner.createState(loginInfo.account, callback);
 		} else {
 			return callback('用户名或密码错误');
@@ -72,7 +94,6 @@
 		
 		var users = JSON.parse(localStorage.getItem('$users') || '[]');
 		users.push(regInfo);
-		console.log(JSON.stringify(users));//return false;
 		//注册信息写到DB
 		mui.post('http://www.yrsyc.cn/yuyao/api/register.php',regInfo,function(data){
 				//服务器返回响应，根据响应结果，分析是否登录成功；
@@ -88,6 +109,53 @@
 		);
 		//return false;
 		//localStorage.setItem('$users', JSON.stringify(users));
+		return callback();
+	};
+	
+	/**
+	 * 修改用户信息
+	 **/
+	owner.edit = function(regInfo, callback) {
+		callback = callback || $.noop;
+		regInfo = regInfo || {};
+		regInfo.account = regInfo.account || '';
+		regInfo.realname = regInfo.realname || '';
+		regInfo.mobile = regInfo.mobile || '';
+		regInfo.company_name = regInfo.company_name || '';
+		regInfo.address = regInfo.address || '';
+		regInfo.role_id = regInfo.role_id || 0;
+		if (regInfo.account.length < 5) {
+			return callback('用户名最短需要 5 个字符');
+		}
+		if (!checkMobile(regInfo.mobile))
+		{
+			return callback('手机号不合法');
+		}
+		
+		if (regInfo.role_id == 0)
+		{
+			return callback('请选择客户分类');
+		}
+		//var vData = JSON.stringify(regInfo)
+		//console.log(vData);return false;
+		
+		mui.post('http://www.yrsyc.cn/yuyao/api/user_edit.php',regInfo,function(data){
+				//服务器返回响应，根据响应结果，分析是否登录成功；
+				
+				mui.toast(data.message);
+				/*
+				if(data.status == 0)
+				{
+					 mui.toast(data.message);
+				}*/
+				//var vData = JSON.stringify(data)
+				//alert(vData);
+			},'json'
+		);
+		
+		var users = JSON.parse(localStorage.getItem('$users') || '[]');
+		users.push(regInfo);
+		localStorage.setItem('$users', JSON.stringify(users));
 		return callback();
 	};
 	
