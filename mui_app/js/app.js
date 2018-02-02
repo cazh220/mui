@@ -94,21 +94,6 @@
 		
 		var users = JSON.parse(localStorage.getItem('$users') || '[]');
 		users.push(regInfo);
-<<<<<<< HEAD
-		console.log(JSON.stringify(users));
-		//注册信息写到DB
-		mui.post('http://www.yrsyc.cn/yuyao/api/register.php',regInfo,function(data){
-				//服务器返回响应，根据响应结果，分析是否登录成功；
-				//console.log(data);
-				mui.toast(data.message);
-				/*
-				if(data.status == 1)
-				{
-					 //mui.toast(data.message);
-					 localStorage.setItem('$users', JSON.stringify(users));
-				}
-				*/
-=======
 		//注册信息写到DB
 		mui.post('http://www.yrsyc.cn/yuyao/api/register.php',regInfo,function(data){
 				//服务器返回响应，根据响应结果，分析是否登录成功；
@@ -118,13 +103,10 @@
 				{
 					 localStorage.setItem('$users', JSON.stringify(users));
 				}
->>>>>>> 141f5f7101a5224f23ec2294338be4a31817d4f7
 				//var vData = JSON.stringify(data)
 				//alert(vData);
 			},'json'
 		);
-<<<<<<< HEAD
-=======
 		//return false;
 		//localStorage.setItem('$users', JSON.stringify(users));
 		return callback();
@@ -173,7 +155,6 @@
 		
 		var users = JSON.parse(localStorage.getItem('$users') || '[]');
 		users.push(regInfo);
->>>>>>> 141f5f7101a5224f23ec2294338be4a31817d4f7
 		localStorage.setItem('$users', JSON.stringify(users));
 		return callback();
 	};
