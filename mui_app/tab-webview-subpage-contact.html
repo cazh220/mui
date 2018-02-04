@@ -3,153 +3,73 @@
 
 	<head>
 		<meta charset="utf-8">
-		<title>Hello MUI</title>
+		<title>我的订单</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
+		<!--标准mui.css-->
 		<link rel="stylesheet" href="css/mui.min.css">
-		<style>
-			html,body {
-				background-color: #efeff4;
-			}
-			.title{
-				margin: 20px 15px 10px;
-				color: #6d6d72;
-				font-size: 15px;
-			}
-			 .oa-contact-cell.mui-table .mui-table-cell {
-				padding: 11px 0;
-				vertical-align: middle;
-			}
-			
-			.oa-contact-cell {
-				position: relative;
-				margin: -11px 0;
-			}
-	
-			.oa-contact-avatar {
-				width: 75px;
-			}
-			.oa-contact-avatar img {
-				border-radius: 50%;
-			}
-			.oa-contact-content {
-				width: 100%;
-			}
-			.oa-contact-name {
-				margin-right: 20px;
-			}
-			.oa-contact-name, oa-contact-position {
-				float: left;
-			}
-		</style>
+		<!--App自定义的css-->
+		<!--<link rel="stylesheet" type="text/css" href="../css/app.css"/>-->
+		
 	</head>
-
 	<body>
-		<div class="mui-content">
-			<div class="title">
-				这是webview模式选项卡中的第3个子页面，该页面展示一个通讯录示例
-			</div>
 
-			<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed">
-				<li class="mui-table-view-cell">
-					<div class="mui-slider-cell">
-						<div class="oa-contact-cell mui-table">
-							<div class="oa-contact-avatar mui-table-cell">
-								<img src="../images/60x60.gif" />
-							</div>
-							<div class="oa-contact-content mui-table-cell">
-								<div class="mui-clearfix">
-									<h4 class="oa-contact-name">叶文洁</h4>
-									<span class="oa-contact-position mui-h6">董事长</span>
-								</div>
-								<p class="oa-contact-email mui-h6">
-									yewenjie@sina.com
-								</p>
-							</div>
-						</div>
-					</div>
-				</li>
-				<li class="mui-table-view-cell">
-					<div class="mui-slider-cell">
-						<div class="oa-contact-cell mui-table">
-							<div class="oa-contact-avatar mui-table-cell">
-								<img src="../images/60x60.gif" />
-							</div>
-							<div class="oa-contact-content mui-table-cell">
-								<div class="mui-clearfix">
-									<h4 class="oa-contact-name">艾AA</h4>
-									<span class="oa-contact-position mui-h6">总经理</span>
-								</div>
-								<p class="oa-contact-email mui-h6">
-									aaa@163.com
-								</p>
-							</div>
-						</div>
-					</div>
-				</li>
-				<li class="mui-table-view-cell">
-					<div class="mui-slider-cell">
-						<div class="oa-contact-cell mui-table">
-							<div class="oa-contact-avatar mui-table-cell">
-								<img src="../images/60x60.gif" />
-							</div>
-							<div class="oa-contact-content mui-table-cell">
-								<div class="mui-clearfix">
-									<h4 class="oa-contact-name">罗辑</h4>
-									<span class="oa-contact-position mui-h6">员工</span>
-								</div>
-								<p class="oa-contact-email mui-h6">
-									luoji@126.com
-								</p>
-							</div>
-						</div>
-					</div>
-				</li>
-				<li class="mui-table-view-cell">
-					<div class="mui-slider-cell">
-						<div class="oa-contact-cell mui-table">
-							<div class="oa-contact-avatar mui-table-cell">
-								<img src="../images/60x60.gif" />
-							</div>
-							<div class="oa-contact-content mui-table-cell">
-								<div class="mui-clearfix">
-									<h4 class="oa-contact-name">云天明</h4>
-									<span class="oa-contact-position mui-h6">员工</span>
-								</div>
-								<p class="oa-contact-email mui-h6">
-									ytm@163.com
-								</p>
-							</div>
-						</div>
-					</div>
-				</li>
-				<li class="mui-table-view-cell">
-					<div class="mui-slider-cell">
-						<div class="oa-contact-cell mui-table">
-							<div class="oa-contact-avatar mui-table-cell">
-								<img src="../images/60x60.gif" />
-							</div>
-							<div class="oa-contact-content mui-table-cell">
-								<div class="mui-clearfix">
-									<h4 class="oa-contact-name">史强</h4>
-									<span class="oa-contact-position mui-h6">员工</span>
-								</div>
-								<p class="oa-contact-email mui-h6">
-									shiqiang@gmail.com
-								</p>
-							</div>
-						</div>
-					</div>
-				</li>
-			</ul>
+		<div class="mui-content">
+			<div class="mui-card">
+				<ul class="mui-table-view" id="order_list" style="font-size: 12px;">
+
+				</ul>
+			</div>
 		</div>
+		<script src="js/mui.min.js"></script>
+		<script>
+			mui.init({
+				swipeBack:true //启用右滑关闭功能
+			});
+
+			//获取我的订单，预加载
+			var username = localStorage.getItem('$account');
+			mui.post('http://www.yrsyc.cn/yuyao/api/order_list.php',{
+				account:username
+			},function(data){
+					//服务器返回响应，根据响应结果
+					html = [];
+					if(data.status == 0)
+					{
+						var controls = document.getElementById("order_list");
+						mui.toast(data.message);
+						controls.innerHTML = html.join('没有订单...');
+					}
+					else
+					{
+						//var vData = JSON.stringify(data['list'][0]['children']);
+						//console.log(vData);
+						
+						html = [];
+						for(var i=0; i<data.list.length; i++)
+						{
+							var txt = '';
+							txt = '<li class="mui-table-view-cell mui-collapse" style="background-color:beige"><a class="mui-navigate-right" href="#"><table width="100%" height="80px"><tr><td width="60%">订单编号：'+data['list'][i]['order_no']+'</td><td width="30%">订单金额：'+data['list'][i]['total_amount']+'</td></tr><tr><td>下单时间：'+data['list'][i]['confirm_time']+'</td><td><font color="red">'+data['list'][i]['order_status_name']+'</font></td></tr></table></a><div class="mui-collapse-content"><form class="mui-input-group">';
+							txt += '<div class="mui-input-row"><table style="text-align:center; width:100%; height:100%; border-top: solid 1px #4CD964;border-bottom: solid 1px #4CD964;"><tr><td>名称</td><td>价格</td><td>数量</td><td>小计</td></tr></table></div>';
+							for(var j=0; j<data['list'][i]['children'].length; j++)
+							{
+								txt += '<div class="mui-input-row"><table style="text-align:center; width:100%; height:100%"><tr><td width="25%">'+data['list'][i]['children'][j]['goods_name']+'</td><td width="25%">￥'+data['list'][i]['children'][j]['good_price']+'</td><td width="25%">'+data['list'][i]['children'][j]['goods_num']+'</td><td width="25%">￥'+data['list'][i]['children'][j]['amount']+'</td></tr></table></div>';
+							}
+							txt += '</form></div></li>';
+							html.push(txt);
+						}
+						
+						var controls = document.getElementById("order_list");
+						controls.innerHTML = html.join('');
+						
+					}
+			},'json'
+		);
+
+			
+		</script>
 	</body>
-	<script src="js/mui.min.js"></script>
-	<script>
-		mui.init({
-			swipeBack:true //启用右滑关闭功能
-		});
-	</script>
+<table style="vertical-align: middle; border-top: solid 1px #4CD964; background-color:beige"><tr><td></td></tr></table>
 </html>
