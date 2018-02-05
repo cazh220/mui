@@ -14,8 +14,12 @@
 		<link rel="stylesheet" type="text/css" href="css/app.css"/>
 	</head>
 	<body>
+		
 		<div class="mui-content">
+			
+			
 			<div class="mui-card">
+				
 				<ul class="mui-table-view" id="goods_list">
 										
 					
@@ -39,6 +43,37 @@
 		mui.init({
 			swipeBack:false //启用右滑关闭功能
 		});
+		
+		(function($) {
+			var btnArray = ['确认', '取消'];
+			$('#goods_list').on('tap', '.mui-btn', function(event) {
+				var elem = this;
+				var li = elem.parentNode.parentNode;
+				console.log(li);
+				mui.confirm('确认删除该条记录？', '购物车', btnArray, function(e) {
+					if (e.index == 0) {
+						li.parentNode.removeChild(li);
+						
+						var x = document.getElementById("id_set").innerHTML;
+						id = x.split(",")
+						var vData = JSON.stringify(id)
+						alert(vData);
+						
+						
+						
+					} else {
+						setTimeout(function() {
+							$.swipeoutClose(li);
+						}, 0);
+					}
+				});
+			});
+			
+		})(mui);
+		
+		
+		
+		
 		//预加载
 		var controls = document.getElementById("goods_list");console.log('cart');
 		var username = localStorage.getItem('$account');
@@ -53,7 +88,7 @@
 						for(var i=0; i<data['list'].length; i++)
 						{
 							_id.push(data['list'][i]['goods_id']);
-							html.push('<li class="mui-table-view-cell"><div class="mui-slider-right mui-disabled"><a class="mui-btn mui-btn-red">删除</a></div><table style="font-size: 14px;"><tr><td width="15%">名称：</td><td>'+data['list'][i]['goods_name']+'</td><td rowspan="4" width="20%"><div class="mui-numbox" data-numbox-min="1" data-numbox-max="999"><button class="mui-btn mui-btn-numbox-minus" type="button">-</button><input id="num_'+data["list"][i]["goods_id"]+'" class="mui-input-numbox" type="number" value="'+data["list"][i]["goods_num"]+'" /><button class="mui-btn mui-btn-numbox-plus" type="button">+</button></div></td></tr><tr><td>价格：</td><td>'+data['list'][i]['good_price']+'</td></tr><tr><td>库存：</td><td>'+data['list'][i]['stock']+'</td></tr><tr><td>描述：</td><td>'+data['list'][i]['description']+'</td></tr></table></li>');
+							html.push('<li class="mui-table-view-cell" id="'+data["list"][i]["goods_id"]+'"><span class="h_goods_id" style="display:none">'+data["list"][i]["goods_id"]+'</span><div class="mui-slider-right mui-disabled"><a class="mui-btn mui-btn-red">删除</a></div><table class="mui-slider-handle" style="font-size: 14px;"><tr><td width="15%">名称：</td><td>'+data['list'][i]['goods_name']+'</td><td rowspan="4" width="20%"><div class="mui-numbox" data-numbox-min="1" data-numbox-max="999"><button class="mui-btn mui-btn-numbox-minus" type="button">-</button><input id="num_'+data["list"][i]["goods_id"]+'" class="mui-input-numbox" type="number" value="'+data["list"][i]["goods_num"]+'" /><button class="mui-btn mui-btn-numbox-plus" type="button">+</button></div></td></tr><tr><td>价格：</td><td>'+data['list'][i]['good_price']+'</td></tr><tr><td>库存：</td><td>'+data['list'][i]['stock']+'</td></tr><tr><td>描述：</td><td>'+data['list'][i]['description']+'</td></tr></table></li>');
 						}
 						controls.innerHTML = html.join('');
 						document.getElementById("id_set").innerHTML = _id.join(',');
@@ -72,6 +107,7 @@
 		//下单
 		function confirm()
 		{
+			
 			var controlsElem = document.getElementById("goods_list");
 			var controlListElem = controlsElem.querySelectorAll('.ids');
 			
