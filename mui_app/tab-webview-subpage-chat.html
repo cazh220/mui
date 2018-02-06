@@ -48,8 +48,22 @@
 			var btnArray = ['确认', '取消'];
 			$('#goods_list').on('tap', '.mui-btn', function(event) {
 				var elem = this;
+				if(elem.attributes.type == undefined)
+				{
+					
+				}
+				else
+				{
+					return false;
+				}
+
+//				if(elem.attributes.type.nodeValue == 'button')
+//				{
+//					return false;
+//				}
+				//console.log(elem.attributes.type.nodeValue);return false;
 				var li = elem.parentNode.parentNode;
-				console.log(li);
+				
 				mui.confirm('确认删除该条记录？', '购物车', btnArray, function(e) {
 					if (e.index == 0) {
 						li.parentNode.removeChild(li);
@@ -57,10 +71,7 @@
 						var x = document.getElementById("id_set").innerHTML;
 						id = x.split(",")
 						var vData = JSON.stringify(id)
-						alert(vData);
-						
-						
-						
+						//alert(vData);
 					} else {
 						setTimeout(function() {
 							$.swipeoutClose(li);
@@ -111,8 +122,17 @@
 			var controlsElem = document.getElementById("goods_list");
 			var controlListElem = controlsElem.querySelectorAll('.ids');
 			
-			var x = document.getElementById("id_set").innerHTML;
-			id = x.split(",")
+			var x = document.getElementsByClassName('h_goods_id');
+			id = new Array();
+			mui.each(x,function(index,item){
+		      //console.log(item.innerHTML);
+		      id.push(item.innerHTML);
+		   	});
+
+		   	
+		   
+			//var x = document.getElementById("id_set").innerHTML;
+			//id = x.split(",")
 			var vData = JSON.stringify(id)
 			//alert(vData);return false;
 			
@@ -126,7 +146,7 @@
 			}
 			var pData = JSON.stringify(ndata);
 			var order_id = document.getElementById("order_id").innerHTML;
-			console.log(pData);
+
 			mui.post('http://www.yrsyc.cn/yuyao/api/confirm_order.php',{info:pData,order_id:order_id},function(data){
 					//服务器返回响应，根据响应结果，分析是否登录成功；
 					mui.toast(data.message);
