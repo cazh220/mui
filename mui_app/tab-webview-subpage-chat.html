@@ -44,6 +44,10 @@
 			swipeBack:false //启用右滑关闭功能
 		});
 		
+		//预加载
+		var controls = document.getElementById("goods_list");
+		var username = localStorage.getItem('$account');
+		
 		(function($) {
 			var btnArray = ['确认', '取消'];
 			$('#goods_list').on('tap', '.mui-btn', function(event) {
@@ -68,10 +72,18 @@
 					if (e.index == 0) {
 						li.parentNode.removeChild(li);
 						
-						var x = document.getElementById("id_set").innerHTML;
-						id = x.split(",")
-						var vData = JSON.stringify(id)
+						//var x = document.getElementById("id_set").innerHTML;
+						//id = x.split(",")
+						//var vData = JSON.stringify(id)
 						//alert(vData);
+						var del_id = li.id;
+						mui.post('http://www.yrsyc.cn/yuyao/api/delete_cart_goods.php',{username:username,goods_id:del_id},function(data){
+								//服务器返回响应，根据响应结果，分析是否登录成功；
+								mui.toast(data.message);
+							},'json'
+						);
+						
+						
 					} else {
 						setTimeout(function() {
 							$.swipeoutClose(li);
@@ -83,11 +95,6 @@
 		})(mui);
 		
 		
-		
-		
-		//预加载
-		var controls = document.getElementById("goods_list");console.log('cart');
-		var username = localStorage.getItem('$account');
 		mui.post('http://www.yrsyc.cn/yuyao/api/cart_goods.php',{
 				username:username
 			},function(data){
@@ -129,7 +136,6 @@
 		      id.push(item.innerHTML);
 		   	});
 
-		   	
 		   
 			//var x = document.getElementById("id_set").innerHTML;
 			//id = x.split(",")
@@ -144,9 +150,15 @@
 				info = id[i]+':'+p;
 				ndata.push(info);
 			}
+
 			var pData = JSON.stringify(ndata);
 			var order_id = document.getElementById("order_id").innerHTML;
-
+			if(pData === '[]')
+			{
+				mui.toast('请选择商品！');
+				return false;
+			}
+			
 			mui.post('http://www.yrsyc.cn/yuyao/api/confirm_order.php',{info:pData,order_id:order_id},function(data){
 					//服务器返回响应，根据响应结果，分析是否登录成功；
 					mui.toast(data.message);

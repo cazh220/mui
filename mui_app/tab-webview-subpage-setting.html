@@ -94,16 +94,46 @@
 			});
 		});
 		
+		//反馈
+		document.getElementById("feedback").addEventListener('tap', function(e) {
+			//显示启动导航
+			mui.openWindow({
+				id: 'feedback',
+				url: 'feedback.html',
+				show: {
+					aniShow: 'fade-in',
+					duration: 300
+				},
+				waiting: {
+					autoShow: false
+				}
+			});
+		});
 		
+		//关于
+		document.getElementById("about").addEventListener('tap', function(e) {
+			//显示启动导航
+			mui.openWindow({
+				id: 'about',
+				url: 'about.html',
+				show: {
+					aniShow: 'fade-in',
+					duration: 300
+				},
+				waiting: {
+					autoShow: false
+				}
+			});
+		});
+		
+		/*
 		document.getElementById("about").addEventListener('tap',function () {
 			//获得主页面的webview
 			var main = plus.webview.currentWebview().parent();
 			//触发主页面的gohome事件
 			mui.fire(main,'gohome');
-		});
-		
-		
-		
+		});*/
+
 		//退出
 		document.getElementById("login").addEventListener('tap', function(e) {
 			localStorage.setItem('$users', '');
